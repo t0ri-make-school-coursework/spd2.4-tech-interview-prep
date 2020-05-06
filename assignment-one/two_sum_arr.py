@@ -1,3 +1,4 @@
+import sys
 # Given two arrays a and b of numbers and a target value t, 
 # find a number from each array whose sum is closest to t. 
 # Example: a=[9, 13, 1, 8, 12, 4, 0, 5], b=[3, 17, 4, 14, 6], t=20
@@ -20,16 +21,26 @@ def two_arrs(items1, items2, t):
     items2.sort() # O(n log n)
     items2.sort() # O(n log n)
 
-    difference = int()
+    difference = sys.maxsize
     left_pointer = 0
     right_pointer = len(items2) - 1
+    left_result = int()
+    right_result = int()
 
     while left_pointer < len(items1) and right_pointer >= 0:
         if abs(items1[left_pointer] + items2[right_pointer] - t) < difference:
-            # https://www.geeksforgeeks.org/given-two-sorted-arrays-number-x-find-pair-whose-sum-closest-x/
+            left_result = left_pointer
+            right_result = right_pointer
+            difference = abs(left_pointer + right_pointer - t)
     
+        if items1[left_pointer] + items2[right_pointer] > t:
+            right_pointer = right_pointer - 1
+        else:
+            left_pointer = left_pointer + 1
 
+    return [left_result, right_result]
 
 
 if __name__ == "__main__":
     print(two_arrs([9, 13, 1, 8, 12, 4, 0, 5], [3, 17, 4, 14, 6], 33))
+    print(two_arrs_brute_force([9, 13, 1, 8, 12, 4, 0, 5], [3, 17, 4, 14, 6], 33))
